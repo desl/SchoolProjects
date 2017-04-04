@@ -6,6 +6,8 @@ window.onload = function(){
     var minesArr = [];
     var minesObj = {};
     var boardArr = [];
+    var viewedCounter = 0;
+    var totalSquares = xAxis * yAxis;
 
     drawBoard(10,10,5);
 
@@ -71,6 +73,7 @@ window.onload = function(){
                 square.style.height= "25px";
                 square.style.width= "25px";
                 square.style.padding="1px";
+                square.style.textAlign = "center";
                 square.style.background = "gray";
                 //square.style.background="blue";
 
@@ -85,24 +88,14 @@ window.onload = function(){
 
     function exposeSquare(x,y){
         var square = document.getElementById(x + ',' + y);
-        square.style.color = "blue";
-        square.style.background = "white";
-        // if the value is zero
-        // expose all the squares around it.
-        /*
-        if (countMines(x,y) === 0){
-            //console.log("all around");
-            for (var i = x -1; i< x+2; i++){
-                for (var j = y -1; j < y+2; j++){
-                    if(!(i<0 || i > xAxis-1 || j<0 || j > yAxis-1 )){
-                        if (document.getElementById(x+','+y).style.background = "gray"){
-                            console.log("exposeSquare(i,j)");
-                        }
-                        //exposeSquare(i,j);
-                    }
-                }
-            }
-        }*/
+        if (square.style.color !== "blue"){
+            viewedCounter ++;
+            square.style.color = "blue";
+            square.style.background = "white";
+        }
+        if (viewedCounter + numMines === totalSquares){
+            alert("win!");
+        }
     }
 
     function processBoard(){
