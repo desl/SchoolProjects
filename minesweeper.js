@@ -11,6 +11,10 @@ window.onload = function(){
     var yQ = [];
     var viewedCounter = 0;
     var totalSquares = xAxis * yAxis;
+    var firstClickOfGame = true;
+    var timerSpan = document.getElementById("countup");
+    var timerCount = 0;
+    var timer;
 
     var resetButton = document.getElementById("resetGame");
     resetButton.addEventListener("click",function(event){
@@ -30,6 +34,16 @@ window.onload = function(){
     }, true);
 
     boardDiv.addEventListener("click", function(event){
+
+        if (firstClickOfGame === true){
+            firstClickOfGame = false;
+            timer = setInterval(function(){
+            //every second, update the timer.
+            timerCount ++;
+            timerSpan.innerText = timerCount;
+            },1000);
+        }
+
         var clickX = parseInt(event.target.id);
         var clickY = parseInt(event.target.id.substr(event.target.id.indexOf(",") + 1));
         exposeSquares(clickX,clickY);
@@ -90,6 +104,9 @@ window.onload = function(){
                 row.appendChild(square);
             }
         }
+        timerCount = 0;
+        timerSpan.innerText = timerCount;
+        clearInterval(timer);
         plantMines();
         processBoard();
         //console.log(boardArr);
@@ -114,7 +131,8 @@ window.onload = function(){
 
             // If the square you just clicked on is a bomb, you lose.
             if (square.className === "hidden bomb"){
-                // lose the game.
+                // stop timer and lose the game.
+                clearInterval(timer);
                 alert("You Lose!");
                 return true;
             }
@@ -132,7 +150,6 @@ window.onload = function(){
                     for (var i = xx-1; i<xx+2; i++){
                         for (var j = yy-1; j<yy+2; j++){
                             if (!(i < 0 || j < 0 || i > xAxis-1 || j > yAxis-1 || (i === xx && j === yy))){
-                                //console.log("popping",i,j, xx, yy);
                                 xQ.push(i);
                                 yQ.push(j);
                             }
@@ -147,7 +164,8 @@ window.onload = function(){
                 // clear the queue for processing, otherwise you win multiple times. AWKWARD!
                 xQ = [];
                 yQ = [];
-                alert("Win!");
+                clearInterval(timer); // stop the timer too.
+                alert("Win in " + timerCount);
             }
         }
     }
