@@ -1,20 +1,19 @@
+//var firstClickOfGame = true;
 
 window.onload = function(){
 
-    var xAxis = 12;
+    var xAxis = 12; // how many squares on that axis of the board?
     var yAxis = 12;
-    var numMines = 15;
-    var minesArr = [];
-    var minesObj = {};
-    var boardArr = [];
-    var xQ = [];
-    var yQ = [];
-    var viewedCounter = 0;
     var totalSquares = xAxis * yAxis;
-    var firstClickOfGame = true;
-    var timerSpan = document.getElementById("countup");
-    var timerCount = 0;
-    var timer;
+    var numMines = 15; // number of mines to place on the board
+    var boardArr = [];
+    var xQ = []; // These two arrays are used as a queue to expose mulitple squares when you click
+    var yQ = []; // on squares that have 0 mines.
+    var viewedCounter = 0;
+    var firstClickOfGame = true; // Used to know when to start the timer.
+    var timer; // will be used for setting and removing the timer interval
+    var timerCount = 0; // number of seconds on the timer.
+    var timerSpan = document.getElementById("countup"); // the element that holds the timer counting up in seconds.
 
     var resetButton = document.getElementById("resetGame");
     resetButton.addEventListener("click",function(event){
@@ -24,7 +23,7 @@ window.onload = function(){
     drawBoard(10,10,5);
 
     var boardDiv = document.getElementById("gameBoard");
-
+/*
     boardDiv.addEventListener("contextmenu", function(event){
         event.preventDefault();
         console.log(event);
@@ -32,10 +31,12 @@ window.onload = function(){
         var clickY = parseInt(event.target.id.substr(event.target.id.indexOf(",") + 1));
         console.log("bomb in", clickX, clickY);
     }, true);
+*/
 
     boardDiv.addEventListener("click", function(event){
-
+        console.log("firstclick:",firstClickOfGame);
         if (firstClickOfGame === true){
+            console.log("first click!");
             firstClickOfGame = false;
             timer = setInterval(function(){
             //every second, update the timer.
@@ -43,7 +44,7 @@ window.onload = function(){
             timerSpan.innerText = timerCount;
             },1000);
         }
-
+        console.log("firstclick:",firstClickOfGame);
         var clickX = parseInt(event.target.id);
         var clickY = parseInt(event.target.id.substr(event.target.id.indexOf(",") + 1));
         exposeSquares(clickX,clickY);
@@ -86,7 +87,7 @@ window.onload = function(){
 
             for (var j = 0; j < yAxis; j++){
                  boardArr[i].push("");
-                 //boardArr[i][j] = "";
+                 boardArr[i][j] = "";
                 // write numbers out in rows
                 var square = document.createElement("div");
                 square.innerText = i + "," + j;
@@ -98,15 +99,19 @@ window.onload = function(){
                 square.style.width= "25px";
                 square.style.padding="1px";
                 square.style.textAlign = "center";
-                //square.style.background = "gray";
                 square.classList.add("hidden");
+                //square.style.background = "gray";
                 //square.style.background="blue";
                 row.appendChild(square);
             }
         }
+        // Get the timer into the correct state:
+        clearInterval(timer);
         timerCount = 0;
         timerSpan.innerText = timerCount;
-        clearInterval(timer);
+        firstClickOfGame = true;
+
+        // Reset the board
         plantMines();
         processBoard();
         //console.log(boardArr);
@@ -146,7 +151,7 @@ window.onload = function(){
 
                 if (square.innerText === "0"){
                     // if surrounding squares are valid, add them to the queue
-                    // probably nested for loops.
+                    // borders make this harder to read, but necessary.
                     for (var i = xx-1; i<xx+2; i++){
                         for (var j = yy-1; j<yy+2; j++){
                             if (!(i < 0 || j < 0 || i > xAxis-1 || j > yAxis-1 || (i === xx && j === yy))){
@@ -164,8 +169,9 @@ window.onload = function(){
                 // clear the queue for processing, otherwise you win multiple times. AWKWARD!
                 xQ = [];
                 yQ = [];
-                clearInterval(timer); // stop the timer too.
+                
                 alert("Win in " + timerCount);
+                clearInterval(timer); // stop the timer too.
             }
         }
     }
@@ -186,6 +192,8 @@ window.onload = function(){
         for (var i=0;i<xAxis;i++){
             for (var j=0; j<yAxis; j++){
                 // if It's a mine, keep the value at "B", otherwise no change needed;
+                // the value "B" stands for bomb. Apparently this is how to play
+                // the game Bombsweeper.
                 if (!isMine(i,j)){
                     var howMany = countMines(i,j);
                     var square = document.getElementById(i + "," + j);
@@ -196,7 +204,7 @@ window.onload = function(){
     }
 
     function plantMines(){
-        minesArr = [];
+        //minesArr = [];
         for (var i =0; i < numMines; i++){
             //console.log(parseInt(Math.random()*xAxis), parseInt(Math.random()*yAxis));
             var xMine = parseInt(Math.random()*xAxis);
