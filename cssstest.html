@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<style>
+	.a{
+		height: 100px;
+		width: 100px;
+		background: red;
+		display: inherit;
+		margin:0;
+		}
+	.b{
+		height: 100px;
+		width: 100px;
+		background: green;
+		display: inherit;
+		margin:0;
+	}
+	.c{
+		height: 100px;
+		width: 100px;
+		background: blue;
+		display: inherit;
+		margin: 0;
+	}
+	.d{
+		height: 100px;
+		width: 100px;
+		background: cyan;
+		display: inherit;
+		margin: 0;
+	}
+	.container-block{
+		display: block;
+	}
+	.container-inline-block{
+		display: inline-block;
+		background: yellow;
+		padding:0;
+		margin:0;
+		//font-size: 0px;
+	}
+	.container-inline{
+		display: inline;
+	}
+	.mydiv{
+
+	}
+	.binline{
+		display: inline-block;
+	}
+	.inline{
+		display: inline-block;
+	}
+</style>
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+<div class="container-block">
+	display: block
+	<div class="a mydiv"></div>
+	<div class="b mydiv"></div>
+	<div class="c mydiv"></div>
+	<div class="d mydiv"></div>
+	more text
+</div>
+<div class="container-inline-block">
+	display: inline-block
+	<div class="a binline"></div>
+	<div class="b binline"></div><div class="c binline"></div><div class="d binline"></div>
+	<p>Inline block respects the height element!</p>
+	<p>The space in between is because of carriage returns in the code. SeriouslY? Work around by using flex box or </p>
+</div>
+<div class="container">
+	<div class="container-inline">
+		display: inline
+		<div class="a">a</div>
+		<div class="b">b</div>
+		<div class="c">c</div>
+		<div class="d">d</div>
+		inline does not respect the height element, it takes the height of the element(s) it contains.
+	</div>
+</div>
+
+	
+</body>
+</html>
